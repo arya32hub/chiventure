@@ -96,6 +96,29 @@ Test(effect_tests, define_player_stat_effect_correct_vals)
     cr_assert_eq(health_boost->num_stats, 2, "Number of stats is wrong");
 }
 
+/* This test checks if the define function works correctly if all values provided are valid */
+Test(item_effect_tests, define_item_stat_effect_correct_vals) 
+{
+    char* stats_to_change[] = {"max_health", "current_health"};
+    double mods[] = {150, 100};
+    int durations[] = {5, 5};
+    item_t *sword = item_new("sword", "a long sword", "a very very very long sword");
+    item_stat_effect_t* health_boost = define_item_stat_effect(sword, stats_to_change, mods, durations, 2);
+    
+    /* Checking if values are set correctly */
+    cr_assert_not_null(sword, "Error: define_items_stat failed");
+    cr_assert_eq(health_boost->item, sword, "Error: Name not assigned correctly");
+    cr_assert_eq(health_boost->modifications[0], 150, "Error:  First modification is wrong");
+    cr_assert_eq(health_boost->modifications[1], 100, "Error:  Second modification is wrong");
+    cr_assert_eq(health_boost->durations[0], 5, "Error: First Duration is wrong");
+    cr_assert_eq(health_boost->durations[1], 5, "Error: Second Duration is wrong");
+    cr_assert_eq(health_boost->num_stats, 2, "Number of stats is wrong");
+}
+
+
+
+
+
 /* This test checks if the define function works correctly if a value provided is invalid */
 Test(effect_tests, define_player_stat_effect_incorrect_vals)
 {
@@ -106,6 +129,9 @@ Test(effect_tests, define_player_stat_effect_incorrect_vals)
     player_stat_effect_t* health_boost = define_player_stat_effect("health boost", stats_to_change, mods, durations, 2, ctx);
     cr_assert_eq(health_boost, NULL, "Error: Health boost should be null due to incorrect input");
 }
+
+
+
 
 /* This test checks if the make test sets the enum correctly */
 Test(effect_tests, make_player_stat_effect_test)
